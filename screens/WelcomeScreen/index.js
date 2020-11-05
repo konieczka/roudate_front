@@ -5,7 +5,7 @@ import Carousel from "components/Carousel";
 import GradientBackground from "components/GradientBackground";
 import { ROUDATE_CYAN, ROUDATE_VIOLET } from "consts/colors";
 
-const WelcomeScreen = () => (
+const WelcomeScreen = ({ navigation }) => (
   <View
     style={{
       flex: 1,
@@ -25,7 +25,12 @@ const WelcomeScreen = () => (
         console.log("BUTTON CLICKED");
       }}
     />
-    <Button label="Sign up" />
+    <Button
+      label="Sign up"
+      onPress={() => {
+        navigation.navigate("RegisterScreen");
+      }}
+    />
   </View>
 );
 
