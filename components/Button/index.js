@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { TouchableHighlight, Text } from "react-native";
 import styles from "./styles";
 
-const Button = ({ outlined, label, onPress }) => {
+const Button = ({ outlined, label, onPress, buttonColor, labelColor }) => {
   return (
     <TouchableHighlight
       style={
@@ -11,7 +11,8 @@ const Button = ({ outlined, label, onPress }) => {
           ? styles.outline
           : {
               ...styles.outline,
-              backgroundColor: "white",
+              borderColor: buttonColor,
+              backgroundColor: buttonColor,
             }
       }
       onPress={onPress}
@@ -22,7 +23,7 @@ const Button = ({ outlined, label, onPress }) => {
             ? styles.labelText
             : {
                 ...styles.labelText,
-                color: "#2BB6CF",
+                color: labelColor,
               }
         }
       >
@@ -36,10 +37,14 @@ Button.propTypes = {
   outlined: PropTypes.bool,
   label: PropTypes.string.isRequired,
   onPress: PropTypes.func.isRequired,
+  buttonColor: PropTypes.string,
+  labelColor: PropTypes.string,
 };
 
 Button.defaultProps = {
   outlined: false,
+  buttonColor: "white",
+  labelColor: "#2BB6CF",
 };
 
 export default Button;
