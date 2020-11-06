@@ -6,12 +6,15 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
   },
+  fbButton: {
+    paddingVertical: 5,
+  },
   content: {
     flex: 1,
     flexDirection: "column",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingVertical: 50,
+    justifyContent: "flex-end",
+    paddingTop: 50,
   },
   header: { fontSize: 40, color: "white", fontFamily: "Jost" },
   subheader: { fontSize: 24, color: "white", fontFamily: "Jost" },
