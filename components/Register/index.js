@@ -18,7 +18,7 @@ import {
 } from "consts/colors";
 import styles from "./styles";
 
-const Register = ({ fields, onSubmit }) => {
+const Register = ({ fields, onSubmit, goToLogin }) => {
   const isKeyboardVisible = useKeyboard();
 
   return (
@@ -52,11 +52,7 @@ const Register = ({ fields, onSubmit }) => {
         <Button label="Sign up" onPress={onSubmit} />
 
         <Text style={styles.subheader}>Already have an account?</Text>
-        <TouchableOpacity
-          onPress={() => {
-            console.log("dupa");
-          }}
-        >
+        <TouchableOpacity onPress={goToLogin}>
           <Text
             style={{
               ...styles.subheader,
@@ -75,6 +71,7 @@ const Register = ({ fields, onSubmit }) => {
 Register.propTypes = {
   fields: PropTypes.arrayOf(PropTypes.any).isRequired,
   onSubmit: PropTypes.func.isRequired,
+  goToLogin: PropTypes.func.isRequired,
 };
 
 export default Register;

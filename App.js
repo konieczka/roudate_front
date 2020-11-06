@@ -1,10 +1,11 @@
 import React from "react";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator, TransitionSpecs } from "@react-navigation/stack";
+import { createStackNavigator } from "@react-navigation/stack";
 import { useFonts } from "expo-font";
 import WelcomeScreen from "screens/WelcomeScreen";
 import RegisterScreen from "screens/RegisterScreen";
+import LoginScreen from "screens/LoginScreen";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -37,6 +38,13 @@ export default function App() {
           <Screen
             name="RegisterScreen"
             component={RegisterScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Screen
+            name="LoginScreen"
+            component={LoginScreen}
             options={{
               headerShown: false,
             }}

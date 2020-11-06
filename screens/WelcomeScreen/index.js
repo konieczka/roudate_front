@@ -22,7 +22,7 @@ const WelcomeScreen = ({ navigation }) => (
       label="Log in"
       outlined
       onPress={() => {
-        console.log("BUTTON CLICKED");
+        navigation.navigate("LoginScreen");
       }}
     />
     <Button

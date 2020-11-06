@@ -22,7 +22,7 @@ const registerMutation = gql`
   }
 `;
 
-const RegisterScreen = () => {
+const RegisterScreen = ({ navigation }) => {
   const [inputValues, setInputValues] = useState({
     name: "",
     dateOfBirth: "",
@@ -89,7 +89,15 @@ const RegisterScreen = () => {
     console.log(loading, data, error);
   };
 
-  return <Register fields={fields} onSubmit={onSubmit} />;
+  return (
+    <Register
+      fields={fields}
+      onSubmit={onSubmit}
+      goToLogin={() => {
+        navigation.navigate("LoginScreen");
+      }}
+    />
+  );
 };
 
 export default RegisterScreen;
