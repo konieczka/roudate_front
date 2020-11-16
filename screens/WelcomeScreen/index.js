@@ -1,8 +1,11 @@
 import React from "react";
-import { LinearGradient } from "expo-linear-gradient";
 import { View, Text } from "react-native";
+import Button from "components/Button";
+import Carousel from "components/Carousel";
+import GradientBackground from "components/GradientBackground";
+import { ROUDATE_CYAN, ROUDATE_VIOLET } from "consts/colors";
 
-const WelcomeScreen = () => (
+const WelcomeScreen = ({ navigation }) => (
   <View
     style={{
       flex: 1,
@@ -10,19 +13,24 @@ const WelcomeScreen = () => (
       justifyContent: "center",
     }}
   >
-    <LinearGradient
-      colors={["#BD1589", "#2BB6CF"]}
-      style={{
-        position: "absolute",
-        left: 0,
-        right: 0,
-        top: 0,
-        height: "100%",
-      }}
-    />
+    <GradientBackground colors={[ROUDATE_VIOLET, ROUDATE_CYAN]} />
     <Text style={{ fontSize: 40, color: "white", fontFamily: "Jost" }}>
       Roudate
     </Text>
+    <Carousel />
+    <Button
+      label="Log in"
+      outlined
+      onPress={() => {
+        navigation.navigate("LoginScreen");
+      }}
+    />
+    <Button
+      label="Sign up"
+      onPress={() => {
+        navigation.navigate("RegisterScreen");
+      }}
+    />
   </View>
 );
 
