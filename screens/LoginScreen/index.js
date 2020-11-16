@@ -1,13 +1,23 @@
 import React, { useState } from "react";
-// import { useMutation } from "@apollo/client";
-// import gql from "graphql-tag";
+import { useMutation } from "@apollo/client";
+import gql from "graphql-tag";
 import Login from "components/Login";
+
+const LoginMutation = gql`
+  mutation loginMutation($email: String!, $password: String!) {
+    tokenAuth(email: $email, password: $password) {
+      token
+      errors
+    }
+  }
+`;
 
 const LoginScreen = ({ navigation }) => {
   const [inputValues, setInputValues] = useState({
     email: "",
     password: "",
   });
+  const [login, { data, error }] = useMutation(LoginMutation);
 
   const fields = [
     {
@@ -39,7 +49,8 @@ const LoginScreen = ({ navigation }) => {
       email: inputValues.email,
       password: inputValues.password,
     };
-    console.log("login");
+    login({ variables: loginData });
+    console.log("login result:", data, error);
   };
 
   return (
