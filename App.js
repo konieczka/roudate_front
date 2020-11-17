@@ -1,9 +1,11 @@
 import React from "react";
+import { Provider } from "react-redux";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useFonts } from "expo-font";
 import ForgotPasswordScreen from "screens/ForgotPasswordScreen";
+import store from "redux_logic/store/store";
 import WelcomeScreen from "screens/WelcomeScreen";
 import RegisterScreen from "screens/RegisterScreen";
 import LoginScreen from "screens/LoginScreen";
