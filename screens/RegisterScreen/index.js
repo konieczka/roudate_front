@@ -1,7 +1,13 @@
 import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import {
+  establishCurrentUser,
+  establishCurrentUserSuccess,
+  establishCurrentUserFailure,
+} from "redux_logic/actions/currentUser";
+import Register from "components/Register";
 import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
-import Register from "components/Register";
 
 const registerMutation = gql`
   mutation registerMutation(
@@ -23,13 +29,14 @@ const registerMutation = gql`
 `;
 
 const RegisterScreen = ({ navigation }) => {
+  const dispatch = useDispatch();
+  const [register, { loading, error, data }] = useMutation(registerMutation);
   const [inputValues, setInputValues] = useState({
     name: "",
     dateOfBirth: "",
     email: "",
     password: "",
   });
-  const [register, { loading, error, data }] = useMutation(registerMutation);
 
   const fields = [
     {
@@ -79,6 +86,7 @@ const RegisterScreen = ({ navigation }) => {
   ];
 
   const onSubmit = () => {
+    dispatch(establishCurrentUser());
     const registerData = {
       email: inputValues.email,
       password: inputValues.password,
@@ -86,13 +94,25 @@ const RegisterScreen = ({ navigation }) => {
     };
 
     register({ variables: registerData });
-    console.log(loading, data, error);
+
+    if (error) {
+      dispatch(establishCurrentUserFailure(error));
+    }
+
+    if (data.register.errors) {
+      dispatch(establishCurrentUserFailure(data.register.errors));
+    }
+
+    if (data.register.success) {
+      dispatch(establishCurrentUserSuccess(data));
+    }
   };
 
   return (
     <Register
       fields={fields}
       onSubmit={onSubmit}
+      isLoading={loading}
       goToLogin={() => {
         navigation.navigate("LoginScreen");
       }}
