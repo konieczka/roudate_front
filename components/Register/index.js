@@ -10,6 +10,7 @@ import {
 import Button from "components/Button";
 import Form from "components/Form";
 import GradientBackground from "components/GradientBackground";
+import Spinner from "components/Spinner";
 import useKeyboard from "hooks/useKeyboard";
 import {
   ROUDATE_CYAN,
@@ -18,11 +19,12 @@ import {
 } from "consts/colors";
 import styles from "./styles";
 
-const Register = ({ fields, onSubmit, goToLogin }) => {
+const Register = ({ fields, onSubmit, goToLogin, isLoading }) => {
   const isKeyboardVisible = useKeyboard();
 
   return (
     <View style={styles.container}>
+      {isLoading && <Spinner />}
       <GradientBackground colors={[ROUDATE_VIOLET, ROUDATE_CYAN]} />
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : "height"}
@@ -72,6 +74,7 @@ Register.propTypes = {
   fields: PropTypes.arrayOf(PropTypes.any).isRequired,
   onSubmit: PropTypes.func.isRequired,
   goToLogin: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired,
 };
 
 export default Register;
