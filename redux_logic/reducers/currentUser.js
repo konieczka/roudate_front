@@ -17,6 +17,7 @@ export const initialState = {
     aboutMe: "",
     company: "",
     jobTitle: "",
+    school: "",
     interests: {
       favBook: "",
       favMovie: "",
