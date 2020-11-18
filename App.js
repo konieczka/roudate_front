@@ -1,15 +1,9 @@
 import React from "react";
 import { Provider } from "react-redux";
 import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
 import { useFonts } from "expo-font";
 import store from "redux_logic/store/store";
-import WelcomeScreen from "screens/WelcomeScreen";
-import RegisterScreen from "screens/RegisterScreen";
-import LoginScreen from "screens/LoginScreen";
-
-const { Navigator, Screen } = createStackNavigator();
+import Navigation from "screens/Navigation";
 
 // TODO: add prod/stage url depending on _DEV_ flag value
 const client = new ApolloClient({
@@ -29,31 +23,7 @@ export default function App() {
   return (
     <Provider store={store}>
       <ApolloProvider client={client}>
-        <NavigationContainer>
-          <Navigator>
-            <Screen
-              name="WelcomeScreen"
-              component={WelcomeScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Screen
-              name="RegisterScreen"
-              component={RegisterScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-            <Screen
-              name="LoginScreen"
-              component={LoginScreen}
-              options={{
-                headerShown: false,
-              }}
-            />
-          </Navigator>
-        </NavigationContainer>
+        <Navigation />
       </ApolloProvider>
     </Provider>
   );
