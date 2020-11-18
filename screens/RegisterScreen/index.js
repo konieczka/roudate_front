@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
   establishCurrentUser,
   establishCurrentUserSuccess,
@@ -85,6 +86,24 @@ const RegisterScreen = ({ navigation }) => {
     },
   ];
 
+  useEffect(() => {
+    if (!loading && data) {
+      if (error) {
+        dispatch(establishCurrentUserFailure(error));
+      }
+
+      if (data.register.errors) {
+        dispatch(establishCurrentUserFailure(data.register.errors));
+      }
+
+      if (data.register.success) {
+        dispatch(establishCurrentUserSuccess(data));
+        AsyncStorage.setItem("@authToken", data.register.token);
+        navigation.navigate("ProfileSettings");
+      }
+    }
+  }, [loading, data, error]);
+
   const onSubmit = () => {
     dispatch(establishCurrentUser());
     const registerData = {
@@ -94,18 +113,6 @@ const RegisterScreen = ({ navigation }) => {
     };
 
     register({ variables: registerData });
-
-    if (error) {
-      dispatch(establishCurrentUserFailure(error));
-    }
-
-    if (data.register.errors) {
-      dispatch(establishCurrentUserFailure(data.register.errors));
-    }
-
-    if (data.register.success) {
-      dispatch(establishCurrentUserSuccess(data));
-    }
   };
 
   return (
