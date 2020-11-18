@@ -13,6 +13,7 @@ export const initialState = {
   isUserFetching: false,
   userAuthToken: null,
   email: "",
+  id: "",
   profile: {
     name: "",
     birthday: "",
@@ -82,6 +83,7 @@ const currentUser = (state = initialState, action) => {
         isUserEstablished: true,
         isUserError: false,
         email: action.payload.me.email,
+        id: action.payload.me.pk,
         profile: action.payload.me.profile,
       };
 

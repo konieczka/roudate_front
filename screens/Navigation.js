@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
@@ -6,7 +6,7 @@ import { createStackNavigator } from "@react-navigation/stack";
 import {
   establishCurrentUser,
   establishCurrentUserSuccess,
-  // establishCurrentUserFailure,
+  establishCurrentUserFailure,
 } from "redux_logic/actions/currentUser";
 import WelcomeScreen from "screens/WelcomeScreen";
 import RegisterScreen from "screens/RegisterScreen";
@@ -16,11 +16,12 @@ import ProfileSettingsScreen from "screens/ProfileSettingsScreen";
 const { Navigator, Screen } = createStackNavigator();
 
 const Navigation = () => {
+  const [wasLaunched, setWasLaunched] = useState(false);
   const dispatch = useDispatch();
-  const { isLoggedIn, isLoading } = useSelector((state) => {
+  const { isLoggedIn, isEstablished } = useSelector((state) => {
     return {
       isLoggedIn: Boolean(state.currentUser.userAuthToken),
-      isLoading: state.currentUser.isUserFetching,
+      isEstablished: state.currentUser.isUserEstablished,
     };
   });
 
@@ -30,14 +31,18 @@ const Navigation = () => {
 
       if (token !== null) {
         dispatch(establishCurrentUserSuccess({ token }));
+      } else {
+        dispatch(establishCurrentUserFailure("User not logged in"));
       }
+
+      setWasLaunched(true);
     };
 
     dispatch(establishCurrentUser());
     setToken();
   }, []);
 
-  if (isLoading) {
+  if (!wasLaunched && !isEstablished) {
     return null;
   }
 
