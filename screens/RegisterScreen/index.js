@@ -97,7 +97,7 @@ const RegisterScreen = ({ navigation }) => {
       }
 
       if (data.register.success) {
-        dispatch(establishCurrentUserSuccess(data));
+        dispatch(establishCurrentUserSuccess({ token: data.register.token }));
         AsyncStorage.setItem("@authToken", data.register.token);
         navigation.navigate("ProfileSettings");
       }
