@@ -1,13 +1,48 @@
 import React, { useState, useEffect } from "react";
+import { useDispatch } from "react-redux";
+import {
+  establishProfile,
+  establishProfileSuccess,
+  establishProfileFailure,
+} from "redux_logic/actions/currentUser";
 import { View, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
 import ScreenHeader from "components/ScreenHeader";
 import ProfileSettingsInput from "components/ProfileSettingsInput";
 import ImageUploader from "components/ImageUploader";
 import ProfileSettingsSelect from "components/ProfileSettingsSelect";
+import { useQuery } from "@apollo/client";
+import gql from "graphql-tag";
+
+const userProfileQuery = gql`
+  query userProfileQuery {
+    me {
+      pk
+      email
+      profile {
+        name
+        birthday
+        gender
+        aboutMe
+        company
+        company
+        jobTitle
+        school
+        interests {
+          favBook
+          favMovie
+          favMusic
+          favFood
+        }
+      }
+    }
+  }
+`;
 
 const ProfileSettingsScreen = () => {
   const { profile } = useSelector((state) => state.currentUser);
+  const { loading, error, data } = useQuery(userProfileQuery);
+  const dispatch = useDispatch();
   const [basicInputValues, setBasicInputValues] = useState([
     {
       field: "aboutMe",
@@ -63,6 +98,22 @@ const ProfileSettingsScreen = () => {
   ]);
 
   useEffect(() => {
+    if (!loading && data) {
+      dispatch(establishProfile());
+
+      if (error) {
+        dispatch(establishProfileFailure(error));
+      }
+
+      if (!data.me) {
+        dispatch(establishProfileFailure("Not logged in"));
+      } else {
+        dispatch(establishProfileSuccess(data));
+      }
+    }
+  }, [loading, data, error]);
+
+  useEffect(() => {
     setBasicInputValues(
       basicInputValues.map((inputField) => {
         return {
@@ -82,7 +133,6 @@ const ProfileSettingsScreen = () => {
     );
   }, [profile]);
 
-  console.log(basicInputValues, interestsInputValues);
   return (
     <View
       style={{
