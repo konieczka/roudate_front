@@ -58,7 +58,7 @@ const currentUser = (state = initialState, action) => {
         isUserFetching: false,
         isUserEstablished: true,
         isUserError: false,
-        userAuthToken: action.payload.register.token,
+        userAuthToken: action.payload.token,
       };
 
     case ESTABLISH_CURRENT_USER_FAILURE:
