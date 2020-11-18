@@ -19,7 +19,7 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <Navigator
-        initialRouteName={isLoggedIn ? "WelcomeScreen" : "ProfileSettings"}
+        initialRouteName={!isLoggedIn ? "WelcomeScreen" : "ProfileSettings"}
       >
         <Screen
           name="WelcomeScreen"

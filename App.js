@@ -1,13 +1,35 @@
 import React from "react";
 import { Provider } from "react-redux";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import { useFonts } from "expo-font";
 import store from "redux_logic/store/store";
 import Navigation from "screens/Navigation";
 
+const httpLink = createHttpLink({
+  uri: "http://10.0.2.2:8000/graphql",
+});
+
+const authLink = setContext(async (_, { headers }) => {
+  const token = await AsyncStorage.getItem("@authToken");
+
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `JWT ${token}` : "",
+    },
+  };
+});
+
 // TODO: add prod/stage url depending on _DEV_ flag value
 const client = new ApolloClient({
-  uri: "http://10.0.2.2:8000/graphql",
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
