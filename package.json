@@ -14,7 +14,7 @@
     "@react-navigation/native": "^5.7.6",
     "@react-navigation/stack": "^5.9.3",
     "babel-plugin-import-graphql": "^2.7.0",
-    "expo": "~39.0.2",
+    "expo": "^39.0.4",
     "expo-font": "~8.3.0",
     "expo-linear-gradient": "~8.3.0",
     "expo-status-bar": "~1.0.2",
