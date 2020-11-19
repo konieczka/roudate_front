@@ -13,7 +13,7 @@ export const initialState = {
   isUserFetching: false,
   userAuthToken: null,
   email: "",
-  id: "",
+  id: null,
   profile: {
     name: "",
     birthday: "",

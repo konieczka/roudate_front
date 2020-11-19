@@ -15,12 +15,16 @@ const registerMutation = gql`
     $email: String!
     $password: String!
     $username: String!
+    $name: String!
+    $birthday: String!
   ) {
     register(
       email: $email
       password1: $password
       password2: $password
       username: $username
+      name: $name
+      birthday: $birthday
     ) {
       token
       errors
@@ -31,10 +35,10 @@ const registerMutation = gql`
 
 const RegisterScreen = ({ navigation }) => {
   const dispatch = useDispatch();
-  const [register, { loading, error, data }] = useMutation(registerMutation);
+  const [register, { loading, errors, data }] = useMutation(registerMutation);
   const [inputValues, setInputValues] = useState({
     name: "",
-    dateOfBirth: "",
+    birthday: "",
     email: "",
     password: "",
   });
@@ -54,11 +58,11 @@ const RegisterScreen = ({ navigation }) => {
     {
       type: "date-of-birth",
       placeholder: "date of birth",
-      value: inputValues.dateOfBirth,
+      value: inputValues.birthday,
       onChangeText: (value) => {
         setInputValues({
           ...inputValues,
-          dateOfBirth: value,
+          birthday: value,
         });
       },
     },
@@ -88,8 +92,8 @@ const RegisterScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (!loading && data) {
-      if (error) {
-        dispatch(establishCurrentUserFailure(error));
+      if (errors) {
+        dispatch(establishCurrentUserFailure(errors));
       }
 
       if (data.register.errors) {
@@ -102,13 +106,12 @@ const RegisterScreen = ({ navigation }) => {
         navigation.navigate("ProfileSettings");
       }
     }
-  }, [loading, data, error]);
+  }, [loading, data, errors]);
 
   const onSubmit = () => {
     dispatch(establishCurrentUser());
     const registerData = {
-      email: inputValues.email,
-      password: inputValues.password,
+      ...inputValues,
       username: Math.random().toString(36).substring(7),
     };
 
