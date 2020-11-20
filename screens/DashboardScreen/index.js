@@ -1,11 +1,15 @@
 import React from "react";
-import { View, Text, Image, TouchableOpacity } from "react-native";
+import { View, Text, Image, TouchableOpacity, ToastAndroid } from "react-native";
 import dashboardLens from "assets/dashboardLens.png";
 import GradientBackground from "components/GradientBackground";
 import { ROUDATE_CYAN, ROUDATE_VIOLET } from "consts/colors";
 import BottomMenu from "../../components/BottomMenu";
 
-const DashboardScreen = ({ navigation }) => (
+const showToast = () => {
+  ToastAndroid.show("Button clicked", ToastAndroid.SHORT);
+};
+
+const DashboardScreen = ({ /*navigation*/ }) => (
   <View
     style={{
       height: "100%",
@@ -35,7 +39,7 @@ const DashboardScreen = ({ navigation }) => (
         <Text style={{ fontWeight: "bold" }}>insert-name-here</Text>
       </Text>
 
-      <TouchableOpacity activeOpacity={1} onPress={() => alert("dupa")}>
+      <TouchableOpacity activeOpacity={1} onPress={() => showToast()}>
         <Image
           marginTop={150}
           marginBottom={40}
