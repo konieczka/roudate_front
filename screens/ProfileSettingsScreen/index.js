@@ -1,48 +1,37 @@
 import React, { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
-import {
-  establishProfile,
-  establishProfileSuccess,
-  establishProfileFailure,
-} from "redux_logic/actions/currentUser";
 import { View, ScrollView } from "react-native";
 import { useSelector } from "react-redux";
+import useUpdateProfile from "hooks/useUpdateProfile";
+import useGetProfile from "hooks/useGetProfile";
 import ScreenHeader from "components/ScreenHeader";
 import ProfileSettingsInput from "components/ProfileSettingsInput";
 import ImageUploader from "components/ImageUploader";
 import ProfileSettingsSelect from "components/ProfileSettingsSelect";
-import { useQuery } from "@apollo/client";
-import gql from "graphql-tag";
+import Button from "components/Button";
+import Spinner from "components/Spinner";
 
-const userProfileQuery = gql`
-  query userProfileQuery {
-    me {
-      pk
-      email
-      profile {
-        name
-        birthday
-        gender
-        aboutMe
-        company
-        company
-        jobTitle
-        school
-        interests {
-          favBook
-          favMovie
-          favMusic
-          favFood
-        }
-      }
-    }
-  }
-`;
+const mapInputValuesToObject = (inputValues) => {
+  let result = {};
+  inputValues.forEach(({ field, value }) => {
+    result = { ...result, [field]: value };
+  });
+
+  return result;
+};
 
 const ProfileSettingsScreen = () => {
   const { profile } = useSelector((state) => state.currentUser);
-  const { loading, error, data } = useQuery(userProfileQuery);
-  const dispatch = useDispatch();
+  const [
+    refetchProfile,
+    isProfileloading,
+    hasProfileFinishedFetching,
+  ] = useGetProfile();
+  const [
+    onUpdate,
+    isUpdateLoading,
+    finishedUpdateFetching,
+  ] = useUpdateProfile();
+
   const [basicInputValues, setBasicInputValues] = useState([
     {
       field: "aboutMe",
@@ -98,22 +87,6 @@ const ProfileSettingsScreen = () => {
   ]);
 
   useEffect(() => {
-    if (!loading && data) {
-      dispatch(establishProfile());
-
-      if (error) {
-        dispatch(establishProfileFailure(error));
-      }
-
-      if (!data.me) {
-        dispatch(establishProfileFailure("Not logged in"));
-      } else {
-        dispatch(establishProfileSuccess(data));
-      }
-    }
-  }, [loading, data, error]);
-
-  useEffect(() => {
     setBasicInputValues(
       basicInputValues.map((inputField) => {
         return {
@@ -133,6 +106,30 @@ const ProfileSettingsScreen = () => {
     );
   }, [profile]);
 
+  useEffect(() => {
+    refetchProfile();
+  }, [finishedUpdateFetching]);
+
+  const onSubmit = () => {
+    onUpdate(mapInputValuesToObject(basicInputValues));
+  };
+
+  const onBasicInputChange = (fieldName) => (value) => {
+    setBasicInputValues(
+      basicInputValues.map((input) => {
+        if (input.field === fieldName) {
+          input.value = value;
+        }
+
+        return input;
+      })
+    );
+  };
+
+  if (!isProfileloading && hasProfileFinishedFetching) {
+    <Spinner />;
+  }
+
   return (
     <View
       style={{
@@ -141,6 +138,7 @@ const ProfileSettingsScreen = () => {
         paddingTop: 75,
       }}
     >
+      {isUpdateLoading && <Spinner />}
       <ScreenHeader label="Your Profile" />
       <ScrollView>
         <ImageUploader />
@@ -148,20 +146,32 @@ const ProfileSettingsScreen = () => {
           options={["Woman", "Man"]}
           selectedOptions={["Man"]}
         />
-        {basicInputValues.map((basicField) => (
+        {basicInputValues.map((basicField) => {
+          const onChangeValue = onBasicInputChange(basicField.field);
+          return (
+            <ProfileSettingsInput
+              key={basicField.field}
+              label={basicField.label}
+              placeholder={basicField.placeholder}
+              onChangeValue={onChangeValue}
+              value={basicField.value}
+            />
+          );
+        })}
+        {interestsInputValues.map((interestsField) => (
           <ProfileSettingsInput
-            key={basicField.field}
-            label={basicField.label}
-            placeholder={basicField.placeholder}
+            key={interestsField.field}
+            label={interestsField.label}
+            placeholder={interestsField.placeholder}
           />
         ))}
-        {interestsInputValues.map((basicField) => (
-          <ProfileSettingsInput
-            key={basicField.field}
-            label={basicField.label}
-            placeholder={basicField.placeholder}
-          />
-        ))}
+        <Button
+          label="Submit"
+          buttonColor="blue"
+          onPress={onSubmit}
+          buttonColor="#3186C4"
+          labelColor="white"
+        />
       </ScrollView>
     </View>
   );
