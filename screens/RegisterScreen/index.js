@@ -1,41 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import {
-  establishCurrentUser,
-  establishCurrentUserSuccess,
-  establishCurrentUserFailure,
-} from "redux_logic/actions/currentUser";
+import useRegister from "hooks/useRegister";
 import Register from "components/Register";
-import { useMutation } from "@apollo/client";
-import gql from "graphql-tag";
-
-const registerMutation = gql`
-  mutation registerMutation(
-    $email: String!
-    $password: String!
-    $username: String!
-    $name: String!
-    $birthday: String!
-  ) {
-    register(
-      email: $email
-      password1: $password
-      password2: $password
-      username: $username
-      name: $name
-      birthday: $birthday
-    ) {
-      token
-      errors
-      success
-    }
-  }
-`;
 
 const RegisterScreen = ({ navigation }) => {
-  const dispatch = useDispatch();
-  const [register, { loading, errors, data }] = useMutation(registerMutation);
+  const [onRegister, loading, finishedFetching] = useRegister();
   const [inputValues, setInputValues] = useState({
     name: "",
     birthday: "",
@@ -91,31 +59,18 @@ const RegisterScreen = ({ navigation }) => {
   ];
 
   useEffect(() => {
-    if (!loading && data) {
-      if (errors) {
-        dispatch(establishCurrentUserFailure(errors));
-      }
-
-      if (data.register.errors) {
-        dispatch(establishCurrentUserFailure(data.register.errors));
-      }
-
-      if (data.register.success) {
-        dispatch(establishCurrentUserSuccess({ token: data.register.token }));
-        AsyncStorage.setItem("@authToken", data.register.token);
-        navigation.navigate("ProfileSettings");
-      }
+    if (!loading && finishedFetching) {
+      navigation.navigate("ProfileSettings");
     }
-  }, [loading, data, errors]);
+  }, [loading, finishedFetching]);
 
   const onSubmit = () => {
-    dispatch(establishCurrentUser());
     const registerData = {
       ...inputValues,
       username: Math.random().toString(36).substring(7),
     };
 
-    register({ variables: registerData });
+    onRegister(registerData);
   };
 
   return (
