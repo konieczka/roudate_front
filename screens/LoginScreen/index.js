@@ -60,6 +60,9 @@ const LoginScreen = ({ navigation }) => {
       goToRegister={() => {
         navigation.navigate("RegisterScreen");
       }}
+      goToRecovery={() => {
+        navigation.navigate("ForgotPasswordScreen");
+      }}
     />
   );
 };

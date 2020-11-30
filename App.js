@@ -3,6 +3,7 @@ import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { useFonts } from "expo-font";
+import ForgotPasswordScreen from "screens/ForgotPasswordScreen";
 import WelcomeScreen from "screens/WelcomeScreen";
 import RegisterScreen from "screens/RegisterScreen";
 import LoginScreen from "screens/LoginScreen";
@@ -28,6 +29,13 @@ export default function App() {
     <ApolloProvider client={client}>
       <NavigationContainer>
         <Navigator>
+          <Screen
+            name="ForgotPasswordScreen"
+            component={ForgotPasswordScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
           <Screen
             name="WelcomeScreen"
             component={WelcomeScreen}
