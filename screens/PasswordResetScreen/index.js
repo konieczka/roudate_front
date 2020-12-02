@@ -3,42 +3,43 @@ import { useMutation } from "@apollo/client";
 import gql from "graphql-tag";
 import PasswordReset from "../../components/PasswordReset";
 
-const SendMailMutation = gql`
-  mutation passwordResetEmail($email: String!) {
-    sendPasswordResetEmail(email: $email) {
-      success
+const ResetPasswordMutation = gql`
+  mutation passwordReset($token: String!, $newPassword1: String!, $newPassword2: String!) {
+    passwordReset(token: $token, newPassword1: $newPassword1, newPassword2: $newPassword2) {
+      success,
       errors
     }
   }
 `;
 
-const PasswordResetScreen = ({ navigation }) => {
+const PasswordResetScreen = ({ route, navigation }) => {
+  const { token } = route.params;
   const [inputValues, setInputValues] = useState({
     password: "",
     confirmPassword: "",
   });
-  const [reset, { data, error }] = useMutation(SendMailMutation);
+  const [reset, { data, error }] = useMutation(ResetPasswordMutation);
 
   const fields = [
     {
-      type: "password",
-      placeholder: "password",
-      value: inputValues.password,
+      type: "newPassword1",
+      placeholder: "new password",
+      value: inputValues.newPassword1,
       onChangeText: (value) => {
         setInputValues({
           ...inputValues,
-          password: value,
+          newPassword1: value,
         });
       },
     },
     {
-      type: "confirmPassword",
+      type: "newPassword2",
       placeholder: "confirm password",
-      value: inputValues.confirmPassword,
+      value: inputValues.newPassword2,
       onChangeText: (value) => {
         setInputValues({
           ...inputValues,
-          confirmPassword: value,
+          newPassword2: value,
         });
       },
     },
@@ -46,8 +47,9 @@ const PasswordResetScreen = ({ navigation }) => {
 
   const onSubmit = () => {
     const resetData = {
-      password: inputValues.password,
-      confirmPassword: inputValues.confirmPassword,
+      token: token,
+      newPassword1: inputValues.newPassword1,
+      newPassword2: inputValues.newPassword2,
     };
     reset({ variables: resetData });
     console.log("reset result:", data, error);
