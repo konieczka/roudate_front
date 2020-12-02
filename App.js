@@ -30,10 +30,11 @@ export default function App() {
   const navigationRef = React.createRef();
 
   Linking.addEventListener('url', event => {
-    console.log(`Linked`);
     let { path, queryParams } = Linking.parse(event.url);
-    console.log(`Linked to app with path: ${path} and data: ${JSON.stringify(queryParams)}`);  
-    navigationRef.current?.navigate('PasswordResetScreen');
+    console.log(`Linked to app with data: parameters: ${queryParams}, token: ${queryParams.token}, destination: ${queryParams.destination}`);  
+    navigationRef.current?.navigate(queryParams.destination, {
+      token: queryParams.token,
+    });
   });
 
   return (
