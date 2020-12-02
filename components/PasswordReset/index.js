@@ -1,11 +1,6 @@
 import React from "react";
 import PropTypes from "prop-types";
-import {
-  View,
-  Text,
-  Platform,
-  KeyboardAvoidingView,
-} from "react-native";
+import { View, Text, Platform, KeyboardAvoidingView } from "react-native";
 import Button from "components/Button";
 import Form from "components/Form";
 import GradientBackground from "components/GradientBackground";
@@ -13,7 +8,6 @@ import useKeyboard from "hooks/useKeyboard";
 import {
   ROUDATE_CYAN,
   ROUDATE_VIOLET,
-  ROUDATE_LIGHT_PINK,
 } from "consts/colors";
 import styles from "./styles";
 
@@ -24,7 +18,7 @@ const PasswordReset = ({ fields, onSubmit }) => {
     <View style={styles.container}>
       <GradientBackground colors={[ROUDATE_VIOLET, ROUDATE_CYAN]} />
       <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{
           ...styles.content,
           paddingBottom: isKeyboardVisible ? 10 : 100,
@@ -36,14 +30,11 @@ const PasswordReset = ({ fields, onSubmit }) => {
             display: !isKeyboardVisible ? "flex" : "none",
           }}
         >
-          <Text style={styles.header}>
-              Enter your{"\n"}new password
-          </Text>
+          <Text style={styles.header}>Enter your{"\n"}new password</Text>
         </View>
 
         <Form fields={fields} />
         <Button label="Confirm" onPress={onSubmit} />
-
       </KeyboardAvoidingView>
     </View>
   );

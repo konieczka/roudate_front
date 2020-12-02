@@ -36,16 +36,11 @@ const VerifyEmail = ({ onSubmit }) => {
             display: !isKeyboardVisible ? "flex" : "none",
           }}
         >
-          <Text style={styles.header}>
-              Almost done
-          </Text>
-          <Text style={styles.subheader}>
-              Click below to verify your email
-          </Text>
+          <Text style={styles.header}>Almost done</Text>
+          <Text style={styles.subheader}>Click below to verify your email</Text>
         </View>
 
         <Button label="Verify" onPress={onSubmit} />
-        
       </KeyboardAvoidingView>
     </View>
   );

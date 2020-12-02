@@ -60,7 +60,7 @@ const BottomMenu = ({ currentTab }) => {
   );
 };
 
-Button.propTypes = {
+BottomMenu.propTypes = {
   currentTab: PropTypes.number.isRequired,
 };
 

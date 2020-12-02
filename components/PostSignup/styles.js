@@ -16,16 +16,16 @@ const styles = StyleSheet.create({
     paddingTop: 50,
   },
 
-  header: { 
-    fontSize: 40, 
-    color: "white", 
+  header: {
+    fontSize: 40,
+    color: "white",
     fontFamily: "Jost",
-    textAlign: "center", 
+    textAlign: "center",
     marginBottom: 40,
   },
-  subheader: { 
-    fontSize: 24, 
-    color: "white", 
+  subheader: {
+    fontSize: 24,
+    color: "white",
     fontFamily: "Jost",
     textAlign: "center",
     marginLeft: 10,

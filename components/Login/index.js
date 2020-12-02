@@ -17,7 +17,7 @@ import {
   ROUDATE_LIGHT_PINK,
 } from "consts/colors";
 import styles from "./styles";
-import * as Linking from 'expo-linking';
+import * as Linking from "expo-linking";
 
 const Login = ({ fields, onSubmit, goToRegister, goToRecovery }) => {
   const isKeyboardVisible = useKeyboard();

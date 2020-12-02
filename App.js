@@ -12,7 +12,7 @@ import PasswordResetRequestedScreen from "screens/PasswordResetRequestedScreen";
 import PostSignupScreen from "screens/PostSignupScreen";
 import VerifyEmailScreen from "screens/VerifyEmailScreen";
 import SuccessfullyVerifiedScreen from "screens/SuccessfullyVerifiedScreen";
-import * as Linking from 'expo-linking';
+import * as Linking from "expo-linking";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -30,12 +30,14 @@ export default function App() {
   if (!loaded) {
     return null;
   }
-  
+
   const navigationRef = React.createRef();
 
-  Linking.addEventListener('url', event => {
+  Linking.addEventListener("url", (event) => {
     let { path, queryParams } = Linking.parse(event.url);
-    console.log(`Linked to app with data: parameters: ${queryParams}, token: ${queryParams.token}, destination: ${queryParams.destination}`);  
+    console.log(
+      `Linked to app with data: parameters: ${queryParams}, token: ${queryParams.token}, destination: ${queryParams.destination}`
+    );
     navigationRef.current?.navigate(queryParams.destination, {
       token: queryParams.token,
     });

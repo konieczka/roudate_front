@@ -36,16 +36,13 @@ const SuccessfullyVerified = ({ goToLogin }) => {
             display: !isKeyboardVisible ? "flex" : "none",
           }}
         >
-          <Text style={styles.header}>
-              Success!
-          </Text>
+          <Text style={styles.header}>Success!</Text>
           <Text style={styles.subheader}>
-              Your email has been successfully verified. 
+            Your email has been successfully verified.
           </Text>
         </View>
 
         <Button label="Log in" onPress={goToLogin} />
-        
       </KeyboardAvoidingView>
     </View>
   );

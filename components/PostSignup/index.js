@@ -36,16 +36,15 @@ const PostSignup = ({ onResend, goToLogin }) => {
             display: !isKeyboardVisible ? "flex" : "none",
           }}
         >
-          <Text style={styles.header}>
-              All done!
-          </Text>
+          <Text style={styles.header}>All done!</Text>
           <Text style={styles.subheader}>
-              Your account has been successfully created. Check your inbox for account verification email.
+            Your account has been successfully created. Check your inbox for
+            account verification email.
           </Text>
         </View>
 
         <Button label="Log in" onPress={goToLogin} />
-        
+
         <View>
           <Text style={styles.subheader}>Can’t find verification email?</Text>
 

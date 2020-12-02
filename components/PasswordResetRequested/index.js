@@ -8,7 +8,6 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import Button from "components/Button";
-import Form from "components/Form";
 import GradientBackground from "components/GradientBackground";
 import useKeyboard from "hooks/useKeyboard";
 import {
@@ -37,11 +36,9 @@ const PasswordResetRequested = ({ onSubmit, goToLogin }) => {
             display: !isKeyboardVisible ? "flex" : "none",
           }}
         >
-          <Text style={styles.header}>
-              Sent!
-          </Text>
+          <Text style={styles.header}>Sent!</Text>
           <Text style={styles.subheader}>
-              Check your email for{"\n"}verification code
+            Check your email for{"\n"}verification code
           </Text>
         </View>
 

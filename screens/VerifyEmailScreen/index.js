@@ -25,11 +25,7 @@ const VerifyEmailScreen = ({ route, navigation }) => {
     navigation.navigate("SuccessfullyVerifiedScreen");
   };
 
-  return (
-    <VerifyEmail
-      onSubmit={onSubmit}
-    />
-  );
+  return <VerifyEmail onSubmit={onSubmit} />;
 };
 
 export default VerifyEmailScreen;

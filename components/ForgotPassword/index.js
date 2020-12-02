@@ -25,7 +25,7 @@ const ForgotPassword = ({ fields, onSubmit, goToLogin }) => {
     <View style={styles.container}>
       <GradientBackground colors={[ROUDATE_VIOLET, ROUDATE_CYAN]} />
       <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
         style={{
           ...styles.content,
           paddingBottom: isKeyboardVisible ? 10 : 100,
@@ -37,17 +37,16 @@ const ForgotPassword = ({ fields, onSubmit, goToLogin }) => {
             display: !isKeyboardVisible ? "flex" : "none",
           }}
         >
-          <Text style={styles.header}>
-              Reset your{"\n"}password
-          </Text>
+          <Text style={styles.header}>Reset your{"\n"}password</Text>
           <Text style={styles.subheader}>
-              Enter your user account's{"\n"}verified email address and{"\n"}we will send you a password{"\n"}reset link.
+            Enter your user account's{"\n"}verified email address and{"\n"}we
+            will send you a password{"\n"}reset link.
           </Text>
         </View>
 
         <Form fields={fields} />
         <Button label="Send" onPress={onSubmit} />
-        
+
         <Text style={styles.subheader}>Got here on accident?</Text>
         <TouchableOpacity onPress={goToLogin}>
           <Text
@@ -60,7 +59,6 @@ const ForgotPassword = ({ fields, onSubmit, goToLogin }) => {
             Go back to login
           </Text>
         </TouchableOpacity>
-
       </KeyboardAvoidingView>
     </View>
   );
