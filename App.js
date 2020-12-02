@@ -10,6 +10,8 @@ import LoginScreen from "screens/LoginScreen";
 import PasswordResetScreen from "screens/PasswordResetScreen";
 import PasswordResetRequestedScreen from "screens/PasswordResetRequestedScreen";
 import PostSignupScreen from "screens/PostSignupScreen";
+import VerifyEmailScreen from "screens/VerifyEmailScreen";
+import SuccessfullyVerifiedScreen from "screens/SuccessfullyVerifiedScreen";
 import * as Linking from 'expo-linking';
 
 const { Navigator, Screen } = createStackNavigator();
@@ -74,6 +76,20 @@ export default function App() {
           <Screen
             name="PostSignupScreen"
             component={PostSignupScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Screen
+            name="VerifyEmailScreen"
+            component={VerifyEmailScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Screen
+            name="SuccessfullyVerifiedScreen"
+            component={SuccessfullyVerifiedScreen}
             options={{
               headerShown: false,
             }}
