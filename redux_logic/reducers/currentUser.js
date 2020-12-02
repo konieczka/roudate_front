@@ -82,6 +82,7 @@ const currentUser = (state = initialState, action) => {
         isUserFetching: false,
         isUserEstablished: true,
         isUserError: false,
+        name: action.payload.me.name,
         email: action.payload.me.email,
         id: action.payload.me.pk,
         profile: action.payload.me.profile,

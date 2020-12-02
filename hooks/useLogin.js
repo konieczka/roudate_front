@@ -14,6 +14,7 @@ const LoginMutation = gql`
     tokenAuth(email: $email, password: $password) {
       token
       errors
+      success
     }
   }
 `;
