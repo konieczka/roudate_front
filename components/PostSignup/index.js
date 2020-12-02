@@ -8,7 +8,6 @@ import {
   KeyboardAvoidingView,
 } from "react-native";
 import Button from "components/Button";
-import Form from "components/Form";
 import GradientBackground from "components/GradientBackground";
 import useKeyboard from "hooks/useKeyboard";
 import {
@@ -18,7 +17,7 @@ import {
 } from "consts/colors";
 import styles from "./styles";
 
-const PasswordResetRequested = ({ onSubmit, goToLogin }) => {
+const PostSignup = ({ onResend, goToLogin }) => {
   const isKeyboardVisible = useKeyboard();
 
   return (
@@ -38,20 +37,22 @@ const PasswordResetRequested = ({ onSubmit, goToLogin }) => {
           }}
         >
           <Text style={styles.header}>
-              Sent!
+              All done!
           </Text>
           <Text style={styles.subheader}>
-              Check your email for{"\n"}verification code
+              Your account has been successfully created. Check your inbox for account verification email.
           </Text>
         </View>
 
         <Button label="Log in" onPress={goToLogin} />
+        
         <View>
-          <Text style={styles.body}>Can’t find reset email?</Text>
-          <TouchableOpacity onPress={onSubmit}>
+          <Text style={styles.subheader}>Can’t find verification email?</Text>
+
+          <TouchableOpacity onPress={onResend}>
             <Text
               style={{
-                ...styles.body,
+                ...styles.subheader,
                 color: ROUDATE_LIGHT_PINK,
                 fontWeight: "bold",
               }}
@@ -65,9 +66,9 @@ const PasswordResetRequested = ({ onSubmit, goToLogin }) => {
   );
 };
 
-PasswordResetRequested.propTypes = {
-  onSubmit: PropTypes.func.isRequired,
+PostSignup.propTypes = {
+  onResend: PropTypes.func.isRequired,
   goToLogin: PropTypes.func.isRequired,
 };
 
-export default PasswordResetRequested;
+export default PostSignup;
