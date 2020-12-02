@@ -16,7 +16,7 @@ const ForgotPasswordScreen = ({ navigation }) => {
   const [inputValues, setInputValues] = useState({
     email: "",
   });
-  const [login, { data, error }] = useMutation(SendMailMutation);
+  const [forgot, { data, error }] = useMutation(SendMailMutation);
 
   const fields = [
     {
@@ -33,11 +33,12 @@ const ForgotPasswordScreen = ({ navigation }) => {
   ];
 
   const onSubmit = () => {
-    const resetData = {
+    const forgotData = {
       email: inputValues.email,
     };
-    login({ variables: resetData });
-    console.log("reset result:", data, error);
+    forgot({ variables: forgotData });
+    console.log("forgot result:", data, error);
+    navigation.navigate("LoginScreen");
   };
 
   return (

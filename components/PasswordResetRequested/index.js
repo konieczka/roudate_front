@@ -17,13 +17,9 @@ import {
   ROUDATE_LIGHT_PINK,
 } from "consts/colors";
 import styles from "./styles";
-import * as Linking from 'expo-linking';
 
-const Register = ({ fields, onSubmit, goToLogin }) => {
+const PasswordResetRequested = ({ onSubmit, goToLogin }) => {
   const isKeyboardVisible = useKeyboard();
-
-  let url = Linking.makeUrl();
-  console.log("linking: ", url);
 
   return (
     <View style={styles.container}>
@@ -32,31 +28,28 @@ const Register = ({ fields, onSubmit, goToLogin }) => {
         behavior={Platform.OS == "ios" ? "padding" : "height"}
         style={{
           ...styles.content,
-          paddingBottom: isKeyboardVisible ? 10 : 75,
+          paddingBottom: isKeyboardVisible ? 10 : 100,
         }}
       >
-        <Text style={styles.header}>Sign up</Text>
-        <View style={styles.fbButton}>
-          <Button
-            label="Sign up with Facebook"
-            buttonColor="#3186C4"
-            labelColor="white"
-          />
-        </View>
-        <Text
+        <View
           style={{
-            ...styles.subheader,
-            display: isKeyboardVisible ? "none" : "flex",
+            ...styles.subsection,
+            display: !isKeyboardVisible ? "flex" : "none",
           }}
         >
-          or
-        </Text>
+          <Text style={styles.header}>
+              Sent!
+          </Text>
+          <Text style={styles.subheader}>
+              Check your email for{"\n"}verification code
+          </Text>
+        </View>
 
         <Form fields={fields} />
-        <Button label="Sign up" onPress={onSubmit} />
-
-        <Text style={styles.subheader}>Already have an account?</Text>
-        <TouchableOpacity onPress={goToLogin}>
+        <Button label="Log in" onPress={goToLogin} />
+        
+        <Text style={styles.subheader}>Can’t find reset email?</Text>
+        <TouchableOpacity onPress={onSubmit}>
           <Text
             style={{
               ...styles.subheader,
@@ -64,18 +57,19 @@ const Register = ({ fields, onSubmit, goToLogin }) => {
               fontWeight: "bold",
             }}
           >
-            Tap to log in
+            Tap to send again
           </Text>
         </TouchableOpacity>
+
       </KeyboardAvoidingView>
     </View>
   );
 };
 
-Register.propTypes = {
+PasswordResetRequested.propTypes = {
   fields: PropTypes.arrayOf(PropTypes.any).isRequired,
   onSubmit: PropTypes.func.isRequired,
   goToLogin: PropTypes.func.isRequired,
 };
 
-export default Register;
+export default PasswordResetRequested;
