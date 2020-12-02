@@ -1,17 +1,35 @@
 import React from "react";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { Provider } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import { useFonts } from "expo-font";
-import WelcomeScreen from "screens/WelcomeScreen";
-import RegisterScreen from "screens/RegisterScreen";
-import LoginScreen from "screens/LoginScreen";
+import store from "redux_logic/store/store";
+import Navigation from "screens/Navigation";
 
-const { Navigator, Screen } = createStackNavigator();
+const httpLink = createHttpLink({
+  uri: "http://10.0.2.2:8000/graphql",
+});
+
+const authLink = setContext(async (_, { headers }) => {
+  const token = await AsyncStorage.getItem("@authToken");
+
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `JWT ${token}` : "",
+    },
+  };
+});
 
 // TODO: add prod/stage url depending on _DEV_ flag value
 const client = new ApolloClient({
-  uri: "http://10.0.2.2:8000/graphql",
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
@@ -25,32 +43,10 @@ export default function App() {
   }
 
   return (
-    <ApolloProvider client={client}>
-      <NavigationContainer>
-        <Navigator>
-          <Screen
-            name="WelcomeScreen"
-            component={WelcomeScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Screen
-            name="RegisterScreen"
-            component={RegisterScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Screen
-            name="LoginScreen"
-            component={LoginScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Navigator>
-      </NavigationContainer>
-    </ApolloProvider>
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <Navigation />
+      </ApolloProvider>
+    </Provider>
   );
 }

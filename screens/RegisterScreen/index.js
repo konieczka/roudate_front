@@ -1,35 +1,15 @@
-import React, { useState } from "react";
-import { useMutation } from "@apollo/client";
-import gql from "graphql-tag";
+import React, { useEffect, useState } from "react";
+import useRegister from "hooks/useRegister";
 import Register from "components/Register";
 
-const registerMutation = gql`
-  mutation registerMutation(
-    $email: String!
-    $password: String!
-    $username: String!
-  ) {
-    register(
-      email: $email
-      password1: $password
-      password2: $password
-      username: $username
-    ) {
-      token
-      errors
-      success
-    }
-  }
-`;
-
 const RegisterScreen = ({ navigation }) => {
+  const [onRegister, loading, finishedFetching] = useRegister();
   const [inputValues, setInputValues] = useState({
     name: "",
-    dateOfBirth: "",
+    birthday: "",
     email: "",
     password: "",
   });
-  const [register, { loading, error, data }] = useMutation(registerMutation);
 
   const fields = [
     {
@@ -46,11 +26,11 @@ const RegisterScreen = ({ navigation }) => {
     {
       type: "date-of-birth",
       placeholder: "date of birth",
-      value: inputValues.dateOfBirth,
+      value: inputValues.birthday,
       onChangeText: (value) => {
         setInputValues({
           ...inputValues,
-          dateOfBirth: value,
+          birthday: value,
         });
       },
     },
@@ -78,21 +58,26 @@ const RegisterScreen = ({ navigation }) => {
     },
   ];
 
+  useEffect(() => {
+    if (!loading && finishedFetching) {
+      navigation.navigate("ProfileSettings");
+    }
+  }, [loading, finishedFetching]);
+
   const onSubmit = () => {
     const registerData = {
-      email: inputValues.email,
-      password: inputValues.password,
+      ...inputValues,
       username: Math.random().toString(36).substring(7),
     };
 
-    register({ variables: registerData });
-    console.log(loading, data, error);
+    onRegister(registerData);
   };
 
   return (
     <Register
       fields={fields}
       onSubmit={onSubmit}
+      isLoading={loading}
       goToLogin={() => {
         navigation.navigate("LoginScreen");
       }}
