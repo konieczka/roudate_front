@@ -45,22 +45,21 @@ const PasswordResetRequested = ({ onSubmit, goToLogin }) => {
           </Text>
         </View>
 
-        <Form fields={fields} />
         <Button label="Log in" onPress={goToLogin} />
-        
-        <Text style={styles.subheader}>Can’t find reset email?</Text>
-        <TouchableOpacity onPress={onSubmit}>
-          <Text
-            style={{
-              ...styles.subheader,
-              color: ROUDATE_LIGHT_PINK,
-              fontWeight: "bold",
-            }}
-          >
-            Tap to send again
-          </Text>
-        </TouchableOpacity>
-
+        <View>
+          <Text style={styles.body}>Can’t find reset email?</Text>
+          <TouchableOpacity onPress={onSubmit}>
+            <Text
+              style={{
+                ...styles.body,
+                color: ROUDATE_LIGHT_PINK,
+                fontWeight: "bold",
+              }}
+            >
+              Tap to send again
+            </Text>
+          </TouchableOpacity>
+        </View>
       </KeyboardAvoidingView>
     </View>
   );

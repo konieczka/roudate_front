@@ -28,6 +28,14 @@ const styles = StyleSheet.create({
     color: "white", 
     fontFamily: "Jost",
     textAlign: "center",
+    marginTop: 30,
+    marginBottom: 30,
+  },
+  body: {
+    fontSize: 24, 
+    color: "white", 
+    fontFamily: "Jost",
+    textAlign: "center",
   },
   loginCta: {
     fontSize: 18,

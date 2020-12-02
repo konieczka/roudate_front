@@ -38,7 +38,9 @@ const ForgotPasswordScreen = ({ navigation }) => {
     };
     forgot({ variables: forgotData });
     console.log("forgot result:", data, error);
-    navigation.navigate("LoginScreen");
+    navigation.navigate("PasswordResetRequestedScreen", {
+      email: inputValues.email,
+    });
   };
 
   return (
