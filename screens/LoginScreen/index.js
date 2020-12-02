@@ -44,7 +44,7 @@ const LoginScreen = ({ navigation }) => {
 
   useEffect(() => {
     if (!loading && finishedFetching) {
-      navigation.navigate("ProfileSettings");
+      navigation.navigate("DummyDashboard");
     }
   }, [loading, finishedFetching]);
 

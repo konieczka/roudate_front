@@ -17,6 +17,7 @@ import PostSignupScreen from "screens/PostSignupScreen";
 import VerifyEmailScreen from "screens/VerifyEmailScreen";
 import SuccessfullyVerifiedScreen from "screens/SuccessfullyVerifiedScreen";
 import ProfileSettingsScreen from "screens/ProfileSettingsScreen";
+import DummyDashboard from "screens/DummyDashboard";
 
 const { Navigator, Screen } = createStackNavigator();
 
@@ -54,7 +55,7 @@ const Navigation = () => {
   return (
     <NavigationContainer>
       <Navigator
-        initialRouteName={!isLoggedIn ? "WelcomeScreen" : "ProfileSettings"}
+        initialRouteName={!isLoggedIn ? "WelcomeScreen" : "DummyDashboard"}
       >
         <Screen
           name="RegisterScreen"
@@ -122,6 +123,13 @@ const Navigation = () => {
         <Screen
           name="ProfileSettings"
           component={ProfileSettingsScreen}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Screen
+          name="DummyDashboard"
+          component={DummyDashboard}
           options={{
             headerShown: false,
           }}
