@@ -9,6 +9,7 @@ import RegisterScreen from "screens/RegisterScreen";
 import LoginScreen from "screens/LoginScreen";
 import PasswordResetScreen from "screens/PasswordResetScreen";
 import PasswordResetRequestedScreen from "screens/PasswordResetRequestedScreen";
+import PostSignupScreen from "screens/PostSignupScreen";
 import * as Linking from 'expo-linking';
 
 const { Navigator, Screen } = createStackNavigator();
@@ -43,6 +44,13 @@ export default function App() {
       <NavigationContainer ref={navigationRef}>
         <Navigator>
           <Screen
+            name="RegisterScreen"
+            component={RegisterScreen}
+            options={{
+              headerShown: false,
+            }}
+          />
+          <Screen
             name="ForgotPasswordScreen"
             component={ForgotPasswordScreen}
             options={{
@@ -64,15 +72,15 @@ export default function App() {
             }}
           />
           <Screen
-            name="WelcomeScreen"
-            component={WelcomeScreen}
+            name="PostSignupScreen"
+            component={PostSignupScreen}
             options={{
               headerShown: false,
             }}
           />
           <Screen
-            name="RegisterScreen"
-            component={RegisterScreen}
+            name="WelcomeScreen"
+            component={WelcomeScreen}
             options={{
               headerShown: false,
             }}
