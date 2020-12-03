@@ -8,12 +8,16 @@ const registerMutation = gql`
     $email: String!
     $password: String!
     $username: String!
+    $birthday: String!
+    $name: String!
   ) {
     register(
       email: $email
       password1: $password
       password2: $password
       username: $username
+      name: $name
+      birthday: $birthday
     ) {
       token
       errors
@@ -27,7 +31,8 @@ const RegisterScreen = ({ navigation }) => {
     name: "",
     dateOfBirth: "",
     email: "",
-    password: "",
+    password1: "",
+    password2: "",
   });
   const [register, { loading, error, data }] = useMutation(registerMutation);
 
@@ -83,10 +88,15 @@ const RegisterScreen = ({ navigation }) => {
       email: inputValues.email,
       password: inputValues.password,
       username: Math.random().toString(36).substring(7),
+      birthday: inputValues.dateOfBirth,
+      name: inputValues.name,
     };
 
     register({ variables: registerData });
     console.log(loading, data, error);
+    navigation.navigate("PostSignupScreen", {
+      email: inputValues.email,
+    });
   };
 
   return (

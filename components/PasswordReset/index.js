@@ -3,7 +3,6 @@ import PropTypes from "prop-types";
 import {
   View,
   Text,
-  TouchableOpacity,
   Platform,
   KeyboardAvoidingView,
 } from "react-native";
@@ -17,9 +16,8 @@ import {
   ROUDATE_LIGHT_PINK,
 } from "consts/colors";
 import styles from "./styles";
-import * as Linking from 'expo-linking';
 
-const Login = ({ fields, onSubmit, goToRegister, goToRecovery }) => {
+const PasswordReset = ({ fields, onSubmit }) => {
   const isKeyboardVisible = useKeyboard();
 
   return (
@@ -38,45 +36,23 @@ const Login = ({ fields, onSubmit, goToRegister, goToRecovery }) => {
             display: !isKeyboardVisible ? "flex" : "none",
           }}
         >
-          <Text style={styles.header}>Log in</Text>
-          <View style={styles.fbButton}>
-            <Button
-              label="Log in with Facebook"
-              buttonColor="#3186C4"
-              labelColor="white"
-            />
-          </View>
-          <Text style={styles.subheader}>or</Text>
+          <Text style={styles.header}>
+              Enter your{"\n"}new password
+          </Text>
         </View>
 
         <Form fields={fields} />
-        <Button label="Log in" onPress={onSubmit} />
-        <TouchableOpacity onPress={goToRecovery}>
-          <Text style={styles.passwordCta}>Forgot password?</Text>
-        </TouchableOpacity>
+        <Button label="Confirm" onPress={onSubmit} />
 
-        <Text style={styles.subheader}>Don't have an account?</Text>
-        <TouchableOpacity onPress={goToRegister}>
-          <Text
-            style={{
-              ...styles.subheader,
-              color: ROUDATE_LIGHT_PINK,
-              fontWeight: "bold",
-            }}
-          >
-            Tap to sign up
-          </Text>
-        </TouchableOpacity>
       </KeyboardAvoidingView>
     </View>
   );
 };
 
-Login.propTypes = {
+PasswordReset.propTypes = {
   fields: PropTypes.arrayOf(PropTypes.any).isRequired,
   onSubmit: PropTypes.func.isRequired,
-  goToRegister: PropTypes.func.isRequired,
-  goToRecovery: PropTypes.func.isRequired,
+  goToLogin: PropTypes.func.isRequired,
 };
 
-export default Login;
+export default PasswordReset;

@@ -17,9 +17,8 @@ import {
   ROUDATE_LIGHT_PINK,
 } from "consts/colors";
 import styles from "./styles";
-import * as Linking from 'expo-linking';
 
-const Login = ({ fields, onSubmit, goToRegister, goToRecovery }) => {
+const ForgotPassword = ({ fields, onSubmit, goToLogin }) => {
   const isKeyboardVisible = useKeyboard();
 
   return (
@@ -38,25 +37,19 @@ const Login = ({ fields, onSubmit, goToRegister, goToRecovery }) => {
             display: !isKeyboardVisible ? "flex" : "none",
           }}
         >
-          <Text style={styles.header}>Log in</Text>
-          <View style={styles.fbButton}>
-            <Button
-              label="Log in with Facebook"
-              buttonColor="#3186C4"
-              labelColor="white"
-            />
-          </View>
-          <Text style={styles.subheader}>or</Text>
+          <Text style={styles.header}>
+              Reset your{"\n"}password
+          </Text>
+          <Text style={styles.subheader}>
+              Enter your user account's{"\n"}verified email address and{"\n"}we will send you a password{"\n"}reset link.
+          </Text>
         </View>
 
         <Form fields={fields} />
-        <Button label="Log in" onPress={onSubmit} />
-        <TouchableOpacity onPress={goToRecovery}>
-          <Text style={styles.passwordCta}>Forgot password?</Text>
-        </TouchableOpacity>
-
-        <Text style={styles.subheader}>Don't have an account?</Text>
-        <TouchableOpacity onPress={goToRegister}>
+        <Button label="Send" onPress={onSubmit} />
+        
+        <Text style={styles.subheader}>Got here on accident?</Text>
+        <TouchableOpacity onPress={goToLogin}>
           <Text
             style={{
               ...styles.subheader,
@@ -64,19 +57,19 @@ const Login = ({ fields, onSubmit, goToRegister, goToRecovery }) => {
               fontWeight: "bold",
             }}
           >
-            Tap to sign up
+            Go back to login
           </Text>
         </TouchableOpacity>
+
       </KeyboardAvoidingView>
     </View>
   );
 };
 
-Login.propTypes = {
+ForgotPassword.propTypes = {
   fields: PropTypes.arrayOf(PropTypes.any).isRequired,
   onSubmit: PropTypes.func.isRequired,
-  goToRegister: PropTypes.func.isRequired,
-  goToRecovery: PropTypes.func.isRequired,
+  goToLogin: PropTypes.func.isRequired,
 };
 
-export default Login;
+export default ForgotPassword;
