@@ -28,6 +28,12 @@ const userProfileQuery = gql`
           favMusic
           favFood
         }
+        preferences {
+          interestedIn
+          ageMin
+          ageMax
+          distance
+        }
       }
     }
   }

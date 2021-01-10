@@ -19,6 +19,12 @@ const updateUserProfileMutation = gql`
           favMusic
           favFood
         }
+        preferences {
+          interestedIn
+          ageMin
+          ageMax
+          distance
+        }
       }
     }
   }
@@ -37,6 +43,7 @@ const useUpdateProfile = () => {
 
   useEffect(() => {
     if (!loading && data) {
+      console.log("UPDATE PROFILE RESPONSE DATA", data);
       setFinishedFetching(true);
     }
   }, [loading, data, error]);
