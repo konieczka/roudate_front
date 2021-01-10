@@ -9,6 +9,34 @@ import ImageUploader from "components/ImageUploader";
 import ProfileSettingsSelect from "components/ProfileSettingsSelect";
 import Button from "components/Button";
 import Spinner from "components/Spinner";
+import ProfileSettingsSlider from "components/ProfileSettingsSlider";
+import ProfileSettingsRange from "components/ProfileSettingsSlider/ProfileSettingsRange";
+
+const genderInputSelectOptions = {
+  woman: {
+    label: "Woman",
+    value: "k",
+  },
+  man: {
+    label: "Man",
+    value: "m",
+  },
+};
+
+const genderPreferenceSelectOptions = {
+  women: {
+    label: "Women",
+    value: "k",
+  },
+  men: {
+    label: "Men",
+    value: "m",
+  },
+  both: {
+    label: "Both",
+    value: "b",
+  },
+};
 
 const mapInputValuesToObject = (inputValues) => {
   let result = {};
@@ -31,6 +59,19 @@ const ProfileSettingsScreen = () => {
     isUpdateLoading,
     finishedUpdateFetching,
   ] = useUpdateProfile();
+
+  const [genderInputValue, setGenderInputValue] = useState(
+    genderInputSelectOptions.man
+  );
+  const [genderPreferenceInputValue, setGenderPreferenceInputValue] = useState(
+    genderPreferenceSelectOptions.women
+  );
+
+  const [distanceInputValue, setDistanceInputValue] = useState(30);
+  const [ageInputValue, setAgeInputValue] = useState({
+    min: 18,
+    max: 25,
+  });
 
   const [basicInputValues, setBasicInputValues] = useState([
     {
@@ -104,6 +145,13 @@ const ProfileSettingsScreen = () => {
         };
       })
     );
+
+    if (profile.gender) {
+      setGenderInputValue({
+        value: profile.gender,
+        label: profile.gender === "k" ? "Woman" : "Man",
+      });
+    }
   }, [profile]);
 
   useEffect(() => {
@@ -111,12 +159,48 @@ const ProfileSettingsScreen = () => {
   }, [finishedUpdateFetching]);
 
   const onSubmit = () => {
-    onUpdate(mapInputValuesToObject(basicInputValues));
+    const profileInput = mapInputValuesToObject(basicInputValues);
+
+    console.log({
+      ...profileInput,
+      gender: genderInputValue,
+      interests: mapInputValuesToObject(interestsInputValues),
+      preferences: {
+        interestedIn: genderPreferenceInputValue.value,
+        ageMin: ageInputValue.min,
+        ageMax: ageInputValue.max,
+        distance: distanceInputValue,
+      },
+    });
+
+    onUpdate({
+      ...profileInput,
+      gender: genderInputValue,
+      interests: mapInputValuesToObject(interestsInputValues),
+      preferences: {
+        interestedIn: genderPreferenceInputValue.value,
+        ageMin: ageInputValue.min,
+        ageMax: ageInputValue.max,
+        distance: distanceInputValue,
+      },
+    });
   };
 
   const onBasicInputChange = (fieldName) => (value) => {
     setBasicInputValues(
       basicInputValues.map((input) => {
+        if (input.field === fieldName) {
+          input.value = value;
+        }
+
+        return input;
+      })
+    );
+  };
+
+  const onInterestInputChange = (fieldName) => (value) => {
+    setInterestsInputValues(
+      interestsInputValues.map((input) => {
         if (input.field === fieldName) {
           input.value = value;
         }
@@ -143,8 +227,14 @@ const ProfileSettingsScreen = () => {
       <ScrollView>
         <ImageUploader />
         <ProfileSettingsSelect
-          options={["Woman", "Man"]}
-          selectedOptions={["Man"]}
+          options={[
+            genderInputSelectOptions.man,
+            genderInputSelectOptions.woman,
+          ]}
+          selectedOptions={genderInputValue}
+          onSelect={(option) => {
+            setGenderInputValue(option);
+          }}
         />
         {basicInputValues.map((basicField) => {
           const onChangeValue = onBasicInputChange(basicField.field);
@@ -158,20 +248,53 @@ const ProfileSettingsScreen = () => {
             />
           );
         })}
-        {interestsInputValues.map((interestsField) => (
-          <ProfileSettingsInput
-            key={interestsField.field}
-            label={interestsField.label}
-            placeholder={interestsField.placeholder}
-          />
-        ))}
-        <Button
-          label="Submit"
-          buttonColor="blue"
-          onPress={onSubmit}
-          buttonColor="#3186C4"
-          labelColor="white"
+        {interestsInputValues.map((interestsField) => {
+          const onChangeValue = onInterestInputChange(interestsField.field);
+          return (
+            <ProfileSettingsInput
+              key={interestsField.field}
+              label={interestsField.label}
+              placeholder={interestsField.placeholder}
+              onChangeValue={onChangeValue}
+              value={interestsField.value}
+            />
+          );
+        })}
+
+        <ProfileSettingsSelect
+          options={[
+            genderPreferenceSelectOptions.women,
+            genderPreferenceSelectOptions.men,
+            genderPreferenceSelectOptions.both,
+          ]}
+          selectedOptions={genderPreferenceInputValue}
+          onSelect={(option) => {
+            setGenderPreferenceInputValue(option);
+          }}
         />
+
+        <ProfileSettingsSlider
+          inputValue={distanceInputValue}
+          onValueChange={setDistanceInputValue}
+          defaultValue={30}
+          label="Distance"
+        />
+
+        <ProfileSettingsRange
+          inputValue={ageInputValue}
+          onValueChange={setAgeInputValue}
+          label="Preferred age"
+        />
+
+        <View style={{ paddingLeft: "12.5%", marginBottom: 15 }}>
+          <Button
+            label="Submit"
+            buttonColor="blue"
+            onPress={onSubmit}
+            buttonColor="#3186C4"
+            labelColor="white"
+          />
+        </View>
       </ScrollView>
     </View>
   );

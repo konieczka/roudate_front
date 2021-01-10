@@ -7,7 +7,7 @@ const getButtonSize = (size) => {
   if (size === "compact") {
     return { width: 180, height: 30 };
   } else if (size === "micro") {
-    return { width: 180, height: 30 };
+    return { width: 110, height: 30 };
   }
 
   return {};

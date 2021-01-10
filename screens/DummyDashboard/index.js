@@ -38,6 +38,14 @@ const WelcomeScreen = ({ navigation }) => {
       <Text style={{ fontSize: 20, color: "white", fontFamily: "Jost" }}>
         School: {profile.school}
       </Text>
+      <Text style={{ fontSize: 20, color: "white", fontFamily: "Jost" }}>
+        Interests:
+        {`${profile.interests.favFood} |${profile.interests.favMusic} | ${profile.interests.favMovie} | ${profile.interests.favBook}`}
+      </Text>
+      <Text style={{ fontSize: 20, color: "white", fontFamily: "Jost" }}>
+        Preferences:
+        {`${profile.preferences.interestedIn} |${profile.preferences.ageMin} | ${profile.preferences.ageMax} | ${profile.preferences.distance}`}
+      </Text>
     </View>
   );
 };
