@@ -1,23 +1,13 @@
-import React, { useState } from "react";
-import { useMutation } from "@apollo/client";
-import gql from "graphql-tag";
+import React, { useState, useEffect } from "react";
+import useLogin from "hooks/useLogin";
 import Login from "components/Login";
 
-const LoginMutation = gql`
-  mutation loginMutation($email: String!, $password: String!) {
-    tokenAuth(email: $email, password: $password) {
-      token
-      errors
-    }
-  }
-`;
-
 const LoginScreen = ({ navigation }) => {
+  const [onLogin, loading, finishedFetching] = useLogin();
   const [inputValues, setInputValues] = useState({
     email: "",
     password: "",
   });
-  const [login, { data, error }] = useMutation(LoginMutation);
 
   const fields = [
     {
@@ -49,9 +39,14 @@ const LoginScreen = ({ navigation }) => {
       email: inputValues.email,
       password: inputValues.password,
     };
-    login({ variables: loginData });
-    console.log("login result:", data, error);
+    onLogin(loginData);
   };
+
+  useEffect(() => {
+    if (!loading && finishedFetching) {
+      navigation.navigate("DummyDashboard");
+    }
+  }, [loading, finishedFetching]);
 
   return (
     <Login

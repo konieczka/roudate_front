@@ -1,24 +1,36 @@
 import React from "react";
-import { ApolloClient, InMemoryCache, ApolloProvider } from "@apollo/client";
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { Provider } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+  ApolloClient,
+  InMemoryCache,
+  ApolloProvider,
+  createHttpLink,
+} from "@apollo/client";
+import { setContext } from "@apollo/client/link/context";
 import { useFonts } from "expo-font";
 import ForgotPasswordScreen from "screens/ForgotPasswordScreen";
-import WelcomeScreen from "screens/WelcomeScreen";
-import RegisterScreen from "screens/RegisterScreen";
-import LoginScreen from "screens/LoginScreen";
-import PasswordResetScreen from "screens/PasswordResetScreen";
-import PasswordResetRequestedScreen from "screens/PasswordResetRequestedScreen";
-import PostSignupScreen from "screens/PostSignupScreen";
-import VerifyEmailScreen from "screens/VerifyEmailScreen";
-import SuccessfullyVerifiedScreen from "screens/SuccessfullyVerifiedScreen";
-import * as Linking from 'expo-linking';
+import store from "redux_logic/store/store";
+import Navigation from "screens/Navigation";
 
-const { Navigator, Screen } = createStackNavigator();
+const httpLink = createHttpLink({
+  uri: "http://10.0.2.2:8000/graphql",
+});
+
+const authLink = setContext(async (_, { headers }) => {
+  const token = await AsyncStorage.getItem("@authToken");
+
+  return {
+    headers: {
+      ...headers,
+      authorization: token ? `JWT ${token}` : "",
+    },
+  };
+});
 
 // TODO: add prod/stage url depending on _DEV_ flag value
 const client = new ApolloClient({
-  uri: "http://10.0.2.2:8000/graphql",
+  link: authLink.concat(httpLink),
   cache: new InMemoryCache(),
 });
 
@@ -42,74 +54,10 @@ export default function App() {
   });
 
   return (
-    <ApolloProvider client={client}>
-      <NavigationContainer ref={navigationRef}>
-        <Navigator>
-          <Screen
-            name="RegisterScreen"
-            component={RegisterScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Screen
-            name="ForgotPasswordScreen"
-            component={ForgotPasswordScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Screen
-            name="PasswordResetScreen"
-            component={PasswordResetScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Screen
-            name="PasswordResetRequestedScreen"
-            component={PasswordResetRequestedScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Screen
-            name="PostSignupScreen"
-            component={PostSignupScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Screen
-            name="VerifyEmailScreen"
-            component={VerifyEmailScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Screen
-            name="SuccessfullyVerifiedScreen"
-            component={SuccessfullyVerifiedScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Screen
-            name="WelcomeScreen"
-            component={WelcomeScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-          <Screen
-            name="LoginScreen"
-            component={LoginScreen}
-            options={{
-              headerShown: false,
-            }}
-          />
-        </Navigator>
-      </NavigationContainer>
-    </ApolloProvider>
+    <Provider store={store}>
+      <ApolloProvider client={client}>
+        <Navigation />
+      </ApolloProvider>
+    </Provider>
   );
 }
