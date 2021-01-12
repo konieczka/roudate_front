@@ -43,7 +43,6 @@ const useUpdateProfile = () => {
 
   useEffect(() => {
     if (!loading && data) {
-      console.log("UPDATE PROFILE RESPONSE DATA", data);
       setFinishedFetching(true);
     }
   }, [loading, data, error]);

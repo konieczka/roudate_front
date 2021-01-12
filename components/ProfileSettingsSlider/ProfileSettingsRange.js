@@ -4,11 +4,7 @@ import RangeSlider from "react-native-range-slider-expo";
 import { ROUDATE_CYAN, ROUDATE_VIOLET, BACKGROUND_GRAY } from "consts/colors";
 import styles from "./styles";
 
-const ProfileSettingsSlider = ({
-  inputValue,
-  onValueChange,
-  label,
-}) => (
+const ProfileSettingsSlider = ({ inputValue, onValueChange, label }) => (
   <View>
     <Text style={styles.selectLabel}>{label}</Text>
     <View style={styles.container}>
@@ -17,8 +13,8 @@ const ProfileSettingsSlider = ({
         min={18}
         max={75}
         step={1}
-        initialFromValue={18}
-        initialToValue={25}
+        initialFromValue={inputValue.min}
+        initialToValue={inputValue.max}
         fromValueOnChange={(v) => {
           onValueChange({ ...inputValue, min: v });
         }}

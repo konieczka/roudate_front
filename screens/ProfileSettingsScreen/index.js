@@ -11,6 +11,32 @@ import Button from "components/Button";
 import Spinner from "components/Spinner";
 import ProfileSettingsSlider from "components/ProfileSettingsSlider";
 import ProfileSettingsRange from "components/ProfileSettingsSlider/ProfileSettingsRange";
+import NavMenu from "components/NavMenu";
+
+function getPreferredGenderOption(value) {
+  switch (value) {
+    case "k":
+      return {
+        label: "Women",
+        value: "k",
+      };
+    case "m":
+      return {
+        label: "Men",
+        value: "m",
+      };
+    case "b":
+      return {
+        label: "Both",
+        value: "b",
+      };
+    default:
+      return {
+        label: "Women",
+        value: "k",
+      };
+  }
+}
 
 const genderInputSelectOptions = {
   woman: {
@@ -47,7 +73,7 @@ const mapInputValuesToObject = (inputValues) => {
   return result;
 };
 
-const ProfileSettingsScreen = () => {
+const ProfileSettingsScreen = ({ navigation }) => {
   const { profile } = useSelector((state) => state.currentUser);
   const [
     refetchProfile,
@@ -152,6 +178,23 @@ const ProfileSettingsScreen = () => {
         label: profile.gender === "k" ? "Woman" : "Man",
       });
     }
+
+    if (profile.preferences.interestedIn) {
+      setGenderPreferenceInputValue(
+        getPreferredGenderOption(profile.preferences.interestedIn)
+      );
+    }
+
+    if (profile.preferences.ageMin && profile.preferences.ageMax) {
+      setAgeInputValue({
+        min: profile.preferences.ageMin,
+        max: profile.preferences.ageMax,
+      });
+    }
+
+    if (profile.preferences.distance) {
+      setDistanceInputValue(profile.preferences.distance);
+    }
   }, [profile]);
 
   useEffect(() => {
@@ -161,21 +204,9 @@ const ProfileSettingsScreen = () => {
   const onSubmit = () => {
     const profileInput = mapInputValuesToObject(basicInputValues);
 
-    console.log({
-      ...profileInput,
-      gender: genderInputValue,
-      interests: mapInputValuesToObject(interestsInputValues),
-      preferences: {
-        interestedIn: genderPreferenceInputValue.value,
-        ageMin: ageInputValue.min,
-        ageMax: ageInputValue.max,
-        distance: distanceInputValue,
-      },
-    });
-
     onUpdate({
       ...profileInput,
-      gender: genderInputValue,
+      gender: genderInputValue.value,
       interests: mapInputValuesToObject(interestsInputValues),
       preferences: {
         interestedIn: genderPreferenceInputValue.value,
@@ -227,6 +258,7 @@ const ProfileSettingsScreen = () => {
       <ScrollView>
         <ImageUploader />
         <ProfileSettingsSelect
+          label="Gender"
           options={[
             genderInputSelectOptions.man,
             genderInputSelectOptions.woman,
@@ -262,6 +294,7 @@ const ProfileSettingsScreen = () => {
         })}
 
         <ProfileSettingsSelect
+          label="Interested in"
           options={[
             genderPreferenceSelectOptions.women,
             genderPreferenceSelectOptions.men,
@@ -288,13 +321,15 @@ const ProfileSettingsScreen = () => {
 
         <View style={{ paddingLeft: "12.5%", marginBottom: 15 }}>
           <Button
-            label="Submit"
+            label="Save"
             buttonColor="blue"
             onPress={onSubmit}
             buttonColor="#3186C4"
             labelColor="white"
           />
         </View>
+
+        <NavMenu navigation={navigation} currentScreen="profile" />
       </ScrollView>
     </View>
   );

@@ -4,16 +4,19 @@ import { View, Text } from "react-native";
 import Button from "components/Button";
 import styles from "./styles";
 
-const ProfileSettingsSelect = ({ options, selectedOptions, onSelect }) => (
+const ProfileSettingsSelect = ({
+  options,
+  selectedOptions,
+  onSelect,
+  label,
+}) => (
   <View>
-    <Text style={styles.selectLabel}>Gender</Text>
+    <Text style={styles.selectLabel}>{label}</Text>
     <View style={styles.container}>
       {options.map((option) => (
         <Button
           label={option.label}
-          outlined={
-            !(JSON.stringify(selectedOptions) === JSON.stringify(option))
-          }
+          outlined={selectedOptions.value !== option.value}
           buttonColor="#3186C4"
           labelColor="white"
           size={options.length > 2 ? "micro" : "compact"}

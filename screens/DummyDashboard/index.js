@@ -1,16 +1,28 @@
-import React from "react";
-import { View, Text } from "react-native";
+import React, { useEffect } from "react";
+import { View, Text, TouchableHighlight } from "react-native";
 import { useSelector } from "react-redux";
 import useGetProfile from "hooks/useGetProfile";
+import useUpdateLocation from "hooks/useUpdateLocation";
+import useMatching from "hooks/useMatching";
 import GradientBackground from "components/GradientBackground";
 import Spinner from "components/Spinner";
+import NavMenu from "components/NavMenu";
+import SearchIcon from "assets/search.svg";
 import { ROUDATE_CYAN, ROUDATE_VIOLET } from "consts/colors";
 
 const WelcomeScreen = ({ navigation }) => {
-  const { name, profile } = useSelector((state) => state.currentUser);
+  const { name } = useSelector((state) => state.currentUser);
   const [, isProfileloading, hasProfileFinishedFetching] = useGetProfile();
+  const [updateLocation, locationLoading] = useUpdateLocation();
+  const startMatching = useMatching();
 
-  if (!isProfileloading && hasProfileFinishedFetching && !name) {
+  useEffect(() => {
+    if (hasProfileFinishedFetching) {
+      updateLocation();
+    }
+  }, [hasProfileFinishedFetching]);
+
+  if (isProfileloading && !hasProfileFinishedFetching && !name) {
     <Spinner />;
   }
 
@@ -24,28 +36,29 @@ const WelcomeScreen = ({ navigation }) => {
     >
       <GradientBackground colors={[ROUDATE_VIOLET, ROUDATE_CYAN]} />
       <Text style={{ fontSize: 40, color: "white", fontFamily: "Jost" }}>
-        Hello {name}
+        Welcome back
       </Text>
-      <Text style={{ fontSize: 20, color: "white", fontFamily: "Jost" }}>
-        About me: {profile.aboutMe}
+      <Text
+        style={{
+          fontSize: 40,
+          color: "white",
+          fontFamily: "Jost",
+          fontWeight: "bold",
+        }}
+      >
+        {name}
       </Text>
-      <Text style={{ fontSize: 20, color: "white", fontFamily: "Jost" }}>
-        Job title: {profile.jobTitle}
+      <TouchableHighlight
+        onPress={() => {
+          startMatching();
+        }}
+      >
+        <SearchIcon width={250} height={250} fill="black" />
+      </TouchableHighlight>
+      <Text style={{ fontSize: 25, color: "white", fontFamily: "Jost" }}>
+        New date
       </Text>
-      <Text style={{ fontSize: 20, color: "white", fontFamily: "Jost" }}>
-        Company: {profile.company}
-      </Text>
-      <Text style={{ fontSize: 20, color: "white", fontFamily: "Jost" }}>
-        School: {profile.school}
-      </Text>
-      <Text style={{ fontSize: 20, color: "white", fontFamily: "Jost" }}>
-        Interests:
-        {`${profile.interests.favFood} |${profile.interests.favMusic} | ${profile.interests.favMovie} | ${profile.interests.favBook}`}
-      </Text>
-      <Text style={{ fontSize: 20, color: "white", fontFamily: "Jost" }}>
-        Preferences:
-        {`${profile.preferences.interestedIn} |${profile.preferences.ageMin} | ${profile.preferences.ageMax} | ${profile.preferences.distance}`}
-      </Text>
+      <NavMenu navigation={navigation} currentScreen="dashboard" absolute />
     </View>
   );
 };
