@@ -15,7 +15,7 @@ const registerMutation = gql`
     $password: String!
     $username: String!
     $name: String!
-    $birthday: String!
+    $birthday: Date!
   ) {
     register(
       email: $email
@@ -34,13 +34,13 @@ const registerMutation = gql`
 
 const useRegister = () => {
   const dispatch = useDispatch();
-  const [register, { loading, errors, data }] = useMutation(registerMutation);
+  const [register, { loading, error, data }] = useMutation(registerMutation);
   const [finishedFetching, setFinishedFetching] = useState(false);
 
   useEffect(() => {
     if (!loading && data) {
-      if (errors) {
-        dispatch(establishCurrentUserFailure(errors));
+      if (error) {
+        dispatch(establishCurrentUserFailure(error));
       }
 
       if (data.register.errors) {
@@ -48,15 +48,13 @@ const useRegister = () => {
       }
 
       if (data.register.success) {
-        dispatch(
-          establishCurrentUserSuccess({ token: data.register.token })
-        );
+        dispatch(establishCurrentUserSuccess({ token: data.register.token }));
         AsyncStorage.setItem("@authToken", data.register.token);
       }
 
       setFinishedFetching(true);
     }
-  }, [loading, data, errors]);
+  }, [loading, data, error]);
 
   const onRegister = (registerData) => {
     dispatch(establishCurrentUser());

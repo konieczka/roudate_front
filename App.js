@@ -6,7 +6,10 @@ import {
   InMemoryCache,
   ApolloProvider,
   createHttpLink,
+  split,
 } from "@apollo/client";
+import { getMainDefinition } from "@apollo/client/utilities";
+import { WebSocketLink } from "@apollo/client/link/ws";
 import { setContext } from "@apollo/client/link/context";
 import { useFonts } from "expo-font";
 import store from "redux_logic/store/store";
@@ -14,6 +17,13 @@ import Navigation from "screens/Navigation";
 
 const httpLink = createHttpLink({
   uri: "http://10.0.2.2:8000/graphql",
+});
+
+const wsLink = new WebSocketLink({
+  uri: "ws://10.0.2.2:8000/graphql",
+  options: {
+    reconnect: true,
+  },
 });
 
 const authLink = setContext(async (_, { headers }) => {
@@ -27,9 +37,21 @@ const authLink = setContext(async (_, { headers }) => {
   };
 });
 
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  authLink.concat(httpLink)
+);
+
 // TODO: add prod/stage url depending on _DEV_ flag value
 const client = new ApolloClient({
-  link: authLink.concat(httpLink),
+  link: splitLink,
   cache: new InMemoryCache(),
 });
 

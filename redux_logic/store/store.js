@@ -5,8 +5,8 @@ import { composeWithDevTools } from "redux-devtools-extension/developmentOnly";
 import rootReducer from "redux_logic/reducers/rootReducer";
 
 const middlewares = [];
-middlewares.push(thunk);
-middlewares.push(logger);
+//middlewares.push(thunk);
+//middlewares.push(logger);
 
 const store = createStore(
   rootReducer,
